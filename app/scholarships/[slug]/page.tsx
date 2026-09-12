@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ExternalLink, TriangleAlert } from 'lucide-react';
-import { Photo } from '@/components/photo';
+import { BarePhoto, Photo } from '@/components/photo';
 import { Chip, CountryMark, CoverageBadge, Field, IncludedRow, SectionMark } from '@/components/ui';
 import { getGuides, getScholarship, getScholarships } from '@/lib/data';
 import { days, formatDate, windowStatus } from '@/lib/dates';
@@ -34,6 +34,10 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
 
   return (
     <>
+      <div className="relative h-44 overflow-hidden border-b border-rule sm:h-60">
+        <BarePhoto country={s.country_code} width={1600} className="h-full w-full object-cover" priority />
+      </div>
+
       <header className="border-b border-rule">
         <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
           <div className="flex flex-wrap items-center gap-3">
@@ -54,7 +58,7 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
               Открыть официальный портал
             </a>
             <Link href={`/budget?country=${s.slug}`} className="btn-quiet">
-              Посчитать бюджет по этой стране
+              Бюджет по этой стране
             </Link>
           </div>
         </div>
@@ -101,7 +105,7 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
                   )}
                   {s.requirements.gpa_note}
                   <Link href="/gpa" className="ml-1 text-stamp underline underline-offset-4">
-                    пересчитать свой балл
+                    конвертер оценок
                   </Link>
                 </Field>
                 <Field label="Языки">
@@ -125,8 +129,7 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
               <SectionMark n="03" rule={false} />
               <h2 className="mt-3 text-xl font-bold tracking-tight">Чек-лист документов</h2>
               <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-soft">
-                Список каждый год слегка меняется. Это база, по которой можно начинать собирать документы уже сейчас,
-                не дожидаясь объявления сезона.
+                Список слегка меняется каждый год. Это база, которую можно собирать заранее, не дожидаясь объявления сезона.
               </p>
 
               <ol className="mt-5 border-y border-rule">
@@ -142,7 +145,7 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
             {/* Процесс */}
             <section className="mt-14">
               <SectionMark n="04" rule={false} />
-              <h2 className="mt-3 text-xl font-bold tracking-tight">Как подаваться</h2>
+              <h2 className="mt-3 text-xl font-bold tracking-tight">Как устроена подача</h2>
 
               <ol className="mt-5 space-y-0">
                 {s.steps.map((step, i) => (
@@ -251,7 +254,7 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
               </Link>
             </div>
 
-            <Photo query={s.photo_query} alt={`Кампус, ${s.country}`} ratio="aspect-[4/3]" />
+            <Photo country={s.country_code} ratio="aspect-[4/3]" width={600} />
 
             <div className="flex flex-wrap gap-1.5">
               {s.quiz.strong_fields.map((f) => (

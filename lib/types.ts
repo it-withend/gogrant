@@ -64,7 +64,6 @@ export type Scholarship = {
   budget: Budget;
   quiz: QuizProfile;
   guide_slugs: string[];
-  photo_query: string;
 };
 
 export type Guide = {

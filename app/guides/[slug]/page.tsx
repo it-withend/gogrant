@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { BarePhoto } from '@/components/photo';
+import { guideCover } from '@/lib/guide-covers';
 import { Markdown } from '@/lib/markdown';
 import { SectionMark } from '@/components/ui';
 import { getGuide, getGuides, getScholarships } from '@/lib/data';
@@ -30,6 +32,10 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
 
   return (
     <>
+      <div className="relative h-40 overflow-hidden border-b border-rule sm:h-56">
+        <BarePhoto name={guideCover(guide.slug)} width={1600} className="h-full w-full object-cover" priority />
+      </div>
+
       <header className="border-b border-rule">
         <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
           <SectionMark n="02" rule={false} />

@@ -1,52 +1,73 @@
-import { findPhoto } from '@/lib/photos';
+import { countryPhoto, photo, type PhotoKey } from '@/lib/photos';
 
-/**
- * Фото из Unsplash. Без ключа API рисуем не градиентный blob, а типографскую
- * плашку в стилистике бланка: линовка и подпись поля.
- */
-export async function Photo({
-  query,
-  alt,
-  className = '',
-  ratio = 'aspect-[16/9]',
-}: {
-  query: string;
-  alt: string;
+type Common = {
   className?: string;
   ratio?: string;
-}) {
-  const photo = await findPhoto(query, alt);
+  width?: number;
+  /** Подпись под фото. Без неё выводится только источник. */
+  caption?: string;
+  priority?: boolean;
+};
 
-  if (!photo) {
-    return (
-      <div className={`relative overflow-hidden border border-rule bg-plate ${ratio} ${className}`}>
-        <div
-          className="absolute inset-0 opacity-70"
-          style={{
-            backgroundImage: 'repeating-linear-gradient(180deg, transparent 0 23px, #C6C8C0 23px 24px)',
-          }}
-        />
-        <div className="absolute inset-x-0 bottom-0 border-t border-rule bg-plate px-3 py-2">
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-ink-soft">Фото не подключено</p>
-          <p className="mt-0.5 truncate font-mono text-[0.65rem] text-ink-soft">{query}</p>
-        </div>
-      </div>
-    );
-  }
+/**
+ * Фото из реестра. Рамка и подпись оформлены как вклеенный в бланк снимок:
+ * тонкая линовка, мелкий моноширинный кредит под кадром.
+ */
+export function Photo({
+  name,
+  country,
+  className = '',
+  ratio = 'aspect-[16/9]',
+  width = 1200,
+  caption,
+  priority = false,
+}: Common & ({ name: PhotoKey; country?: never } | { country: string; name?: never })) {
+  const p = country ? countryPhoto(country, width) : photo(name as PhotoKey, width);
 
   return (
     <figure className={className}>
       <div className={`relative overflow-hidden border border-rule bg-plate ${ratio}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={photo.url} alt={photo.alt} className="h-full w-full object-cover" loading="lazy" />
+        <img
+          src={p.url}
+          alt={p.alt}
+          className="h-full w-full object-cover"
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+        />
       </div>
-      <figcaption className="mt-1.5 font-mono text-[0.65rem] text-ink-soft">
-        Фото:{' '}
-        <a href={photo.authorUrl} target="_blank" rel="noreferrer" className="underline underline-offset-2">
-          {photo.authorName}
+      <figcaption className="mt-1.5 flex flex-wrap items-baseline justify-between gap-2 font-mono text-[0.65rem] text-ink-soft">
+        <span>{caption ?? p.alt}</span>
+        <a href={p.source} target="_blank" rel="noreferrer" className="shrink-0 underline underline-offset-2">
+          Unsplash
         </a>
-        {' / Unsplash'}
       </figcaption>
     </figure>
+  );
+}
+
+/** Фото без подписи — для фоновых и декоративных блоков. */
+export function BarePhoto({
+  name,
+  country,
+  className = '',
+  width = 1200,
+  priority = false,
+}: {
+  className?: string;
+  width?: number;
+  priority?: boolean;
+} & ({ name: PhotoKey; country?: never } | { country: string; name?: never })) {
+  const p = country ? countryPhoto(country, width) : photo(name as PhotoKey, width);
+
+  // eslint-disable-next-line @next/next/no-img-element
+  return (
+    <img
+      src={p.url}
+      alt={p.alt}
+      className={className}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchPriority={priority ? 'high' : 'auto'}
+    />
   );
 }

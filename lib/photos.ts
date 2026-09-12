@@ -1,51 +1,65 @@
 /**
- * Фотографии берутся из Unsplash по официальному API на этапе рендера
- * (ISR, сутки кэша). Ключ кладётся в UNSPLASH_ACCESS_KEY.
+ * Реестр фотографий.
  *
- * Если ключа нет — возвращаем null, и компонент <Photo> рисует вместо
- * фотографии типографскую плашку. Никаких градиентных заглушек.
+ * Снимки подобраны вручную по смыслу каждой секции и захардкожены по id
+ * Unsplash. Так они работают без ключа API и не меняются при пересборке —
+ * на сайте про документы и дедлайны случайная картинка выглядела бы странно.
  *
- * Лицензия Unsplash не требует атрибуции, но она считается хорошим тоном и
- * прямо рекомендуется гайдлайнами API, поэтому имя автора и ссылка с
- * обязательным utm-параметром возвращаются и выводятся под фото.
+ * Лицензия Unsplash разрешает использование без атрибуции, но ссылка на
+ * источник выводится под фото: это честно по отношению к авторам.
  */
 
-export type Photo = {
-  url: string;
-  alt: string;
-  authorName: string;
-  authorUrl: string;
+export type PhotoKey =
+  | 'hero'
+  | 'graduation'
+  | 'documents'
+  | 'passport'
+  | 'airport'
+  | 'library'
+  | 'studying'
+  | 'country-hu'
+  | 'country-tr'
+  | 'country-kr'
+  | 'country-ru'
+  | 'country-cn';
+
+type Entry = { id: string; alt: string };
+
+const REGISTRY: Record<PhotoKey, Entry> = {
+  hero: { id: 'photo-1541339907198-e08756dedf3f', alt: 'Выпускники подбрасывают академические шапочки' },
+  graduation: { id: 'photo-1590012314607-cda9d9b699ae', alt: 'Выпускники в мантиях на церемонии вручения дипломов' },
+  documents: { id: 'photo-1454496406107-dc34337da8d6', alt: 'Паспорт и бумаги на столе' },
+  passport: { id: 'photo-1581553673739-c4906b5d0de8', alt: 'Раскрытый паспорт с визовыми штампами' },
+  airport: { id: 'photo-1666185761906-9136613bace8', alt: 'Пассажиры в зале вылета аэропорта' },
+  library: { id: 'photo-1683319598210-d70486f2f996', alt: 'Студенты занимаются в университетской библиотеке' },
+  studying: { id: 'photo-1514369118554-e20d93546b30', alt: 'Студентка пишет в тетради' },
+  'country-hu': { id: 'photo-1616432902940-b7a1acbc60b3', alt: 'Здание венгерского парламента на берегу Дуная, Будапешт' },
+  'country-tr': { id: 'photo-1710162518260-1d200de27e1f', alt: 'Историческое здание в Стамбуле' },
+  'country-kr': { id: 'photo-1742747215638-0105cbcd2645', alt: 'Учебный корпус, увитый плющом, кампус в Сеуле' },
+  'country-ru': { id: 'photo-1523509080324-9183f313dc50', alt: 'Главное здание Московского государственного университета' },
+  'country-cn': { id: 'photo-1667659814820-b770554ecae2', alt: 'Здание с традиционной черепичной крышей у воды, Пекин' },
 };
 
-const UTM = 'utm_source=grant_uz&utm_medium=referral';
+export type Photo = { url: string; alt: string; source: string };
 
-export async function findPhoto(query: string, alt: string): Promise<Photo | null> {
-  const key = process.env.UNSPLASH_ACCESS_KEY;
-  if (!key) return null;
+/** w — ширина отдаваемого файла: под каждый размер блока своя, чтобы не тянуть лишнее. */
+export function photo(key: PhotoKey, w = 1200): Photo {
+  const entry = REGISTRY[key];
+  return {
+    url: `https://images.unsplash.com/${entry.id}?w=${w}&q=75&fm=jpg&fit=crop&auto=format`,
+    alt: entry.alt,
+    source: 'https://unsplash.com',
+  };
+}
 
-  try {
-    const res = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape&content_filter=high`,
-      {
-        headers: { Authorization: `Client-ID ${key}`, 'Accept-Version': 'v1' },
-        next: { revalidate: 86_400 },
-      },
-    );
-    if (!res.ok) return null;
+const COUNTRY_KEYS: Record<string, PhotoKey> = {
+  HU: 'country-hu',
+  TR: 'country-tr',
+  KR: 'country-kr',
+  RU: 'country-ru',
+  CN: 'country-cn',
+};
 
-    const json = (await res.json()) as {
-      results?: { urls: { raw: string }; user: { name: string; links: { html: string } }; alt_description?: string }[];
-    };
-    const hit = json.results?.[0];
-    if (!hit) return null;
-
-    return {
-      url: `${hit.urls.raw}&w=1200&q=75&fm=jpg&fit=crop`,
-      alt: alt || hit.alt_description || query,
-      authorName: hit.user.name,
-      authorUrl: `${hit.user.links.html}?${UTM}`,
-    };
-  } catch {
-    return null;
-  }
+export function countryPhoto(code: string, w = 1200): Photo {
+  return photo(COUNTRY_KEYS[code] ?? 'graduation', w);
 }

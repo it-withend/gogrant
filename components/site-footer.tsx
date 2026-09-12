@@ -7,8 +7,7 @@ export function SiteFooter() {
         <div>
           <p className="text-sm font-bold">Грант</p>
           <p className="mt-2 max-w-sm text-sm leading-relaxed text-ink-soft">
-            Собрано выпускниками, которые сами проходили через эти дедлайны, апостили и анкеты. Данные обновляются
-            вручную, поэтому перед подачей всегда сверяйся с официальным порталом программы.
+            Справочник по стипендиям для абитуриентов из стран СНГ. Данные обновляются вручную, поэтому официальным источником остаётся портал самой программы.
           </p>
         </div>
 
@@ -26,14 +25,14 @@ export function SiteFooter() {
           <ul className="mt-3 space-y-1.5 text-sm">
             <li><Link href="/quiz" className="text-ink-soft hover:text-ink">Подбор стипендии</Link></li>
             <li><Link href="/budget" className="text-ink-soft hover:text-ink">Калькулятор бюджета</Link></li>
-            <li><Link href="/gpa" className="text-ink-soft hover:text-ink">Калькулятор GPA</Link></li>
+            <li><Link href="/gpa" className="text-ink-soft hover:text-ink">Конвертер оценок</Link></li>
           </ul>
         </div>
       </div>
 
       <div className="border-t border-rule">
         <p className="mx-auto max-w-6xl px-4 py-4 font-mono text-xs text-ink-soft sm:px-6">
-          Суммы и даты — ориентировочные, актуальны на сентябрь 2026. Официальным источником остаётся портал программы.
+          Суммы и даты ориентировочные, актуальны на сентябрь 2026. Требования и формы меняются каждый сезон.
         </p>
       </div>
     </footer>

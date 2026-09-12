@@ -24,7 +24,7 @@ export function SiteHeader() {
         <Link href="/" className="flex items-baseline gap-2.5" onClick={() => setOpen(false)}>
           <span className="text-lg font-bold tracking-tight">Грант</span>
           <span className="hidden font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-soft sm:inline">
-            Узбекистан
+            СНГ
           </span>
         </Link>
 
