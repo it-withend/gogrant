@@ -20,8 +20,12 @@
 
 ## Стек
 
-Next.js 15 (App Router) · TypeScript · Tailwind CSS · Supabase (Postgres) ·
-lucide-react · деплой на Netlify.
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS ·
+Supabase (Postgres) · lucide-react · деплой на Netlify.
+
+Версии Next.js и React держатся актуальными не для красоты: Netlify блокирует
+деплой проектов на версиях с незакрытыми критическими уязвимостями. Проверить
+состояние можно командой `npm audit` — она должна показывать ноль находок.
 
 ## Запуск локально
 

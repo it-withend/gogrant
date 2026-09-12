@@ -211,3 +211,15 @@ Site configuration → Build & deploy → Plugins.
 
 **`permission denied for table scholarships` в логах.** Не выполнен блок с
 RLS-политиками из `schema.sql`. Нужно прогнать файл целиком ещё раз.
+
+**Деплой блокируется с упоминанием уязвимости Next.js.** Netlify не пускает
+сборки на версиях Next.js с незакрытыми критическими CVE. Лечится обновлением:
+
+```bash
+npm install next@latest react@latest react-dom@latest
+```
+
+После этого `npm audit` должен показывать ноль уязвимостей, а локальная сборка
+`npm run build` — проходить без ошибок. Только потом имеет смысл коммитить и
+пушить: Netlify собирает ровно то, что лежит в репозитории, включая
+`package-lock.json`.
