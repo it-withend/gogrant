@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-paper text-ink antialiased;
+    font-feature-settings: 'tnum' 0;
+  }
+
+  /* Цифры в трекере и калькуляторах — табличные, чтобы не прыгали */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: #1b4d8f;
+    color: #fafaf7;
+  }
+
+  :focus-visible {
+    outline: 2px solid #1b4d8f;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Бланковая линовка слева от секции */
+  .field-rule {
+    @apply border-l border-rule pl-4 sm:pl-6;
+  }
+
+  /* Перфорация между сегментами ленты дедлайнов */
+  .perforation {
+    background-image: radial-gradient(circle at center, #c6c8c0 1px, transparent 1.2px);
+    background-size: 1px 9px;
+    background-repeat: repeat-y;
+    background-position: center;
+  }
+
+  .btn {
+    @apply inline-flex items-center gap-2 border border-ink bg-ink px-4 py-2.5 text-sm font-medium text-plate transition-colors hover:bg-stamp hover:border-stamp;
+  }
+
+  .btn-quiet {
+    @apply inline-flex items-center gap-2 border border-rule bg-plate px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-ink;
+  }
+
+  .plate {
+    @apply border border-rule bg-plate;
+  }
+
+  .label {
+    @apply font-mono text-[0.68rem] uppercase tracking-[0.12em] text-ink-soft;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
