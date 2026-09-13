@@ -32,16 +32,15 @@ export function PageHeader({
 }
 
 /**
- * Страна обозначается кодом на наклонной «наклейке», а не флагом-эмодзи:
- * читается как проштампованный ярлык на посылке, а не аккуратный SaaS-тег,
- * и одинаково выглядит на всех платформах.
+ * Страна обозначается кодом в прямоугольной рамке, а не флагом-эмодзи:
+ * читается как штамп в бланке, а не аккуратный SaaS-тег, и одинаково
+ * выглядит на всех платформах.
  */
 export function CountryMark({ code, size = 'md' }: { code: string; size?: 'sm' | 'md' }) {
   const cls = size === 'sm' ? 'h-6 w-8 text-[0.65rem]' : 'h-9 w-12 text-xs';
   return (
     <span
-      className={`sticker items-center justify-center font-mono font-medium tracking-[0.08em] text-ink ${cls}`}
-      style={{ '--tilt': '2deg' } as React.CSSProperties}
+      className={`tag items-center justify-center font-mono font-medium tracking-[0.08em] text-ink ${cls}`}
       aria-hidden
     >
       {code}
@@ -59,10 +58,7 @@ export function CoverageBadge({ coverage }: { coverage: Coverage }) {
   const dot = coverage === 'full' ? 'bg-stamp' : coverage === 'partial' ? 'bg-amber' : 'bg-seal';
 
   return (
-    <span
-      className="sticker items-center gap-1.5 px-2.5 py-1 font-mono text-[0.68rem] uppercase tracking-[0.1em] text-ink"
-      style={{ '--tilt': '-1.5deg' } as React.CSSProperties}
-    >
+    <span className="tag items-center gap-1.5 px-2.5 py-1 font-mono text-[0.68rem] uppercase tracking-[0.1em] text-ink">
       <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${dot}`} aria-hidden />
       {COVERAGE_TEXT[coverage]}
     </span>

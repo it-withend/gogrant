@@ -20,7 +20,6 @@ export type PhotoKey =
   | 'country-hu'
   | 'country-tr'
   | 'country-kr'
-  | 'country-ru'
   | 'country-cn';
 
 type Entry = { id: string; alt: string };
@@ -36,7 +35,6 @@ const REGISTRY: Record<PhotoKey, Entry> = {
   'country-hu': { id: 'photo-1616432902940-b7a1acbc60b3', alt: 'Здание венгерского парламента на берегу Дуная, Будапешт' },
   'country-tr': { id: 'photo-1710162518260-1d200de27e1f', alt: 'Историческое здание в Стамбуле' },
   'country-kr': { id: 'photo-1742747215638-0105cbcd2645', alt: 'Учебный корпус, увитый плющом, кампус в Сеуле' },
-  'country-ru': { id: 'photo-1523509080324-9183f313dc50', alt: 'Главное здание Московского государственного университета' },
   'country-cn': { id: 'photo-1667659814820-b770554ecae2', alt: 'Здание с традиционной черепичной крышей у воды, Пекин' },
 };
 
@@ -56,7 +54,6 @@ const COUNTRY_KEYS: Record<string, PhotoKey> = {
   HU: 'country-hu',
   TR: 'country-tr',
   KR: 'country-kr',
-  RU: 'country-ru',
   CN: 'country-cn',
 };
 

@@ -1,30 +1,31 @@
 import type { Metadata } from 'next';
-import { IBM_Plex_Mono, PT_Serif, Unbounded } from 'next/font/google';
+import { IBM_Plex_Mono, IBM_Plex_Sans, Oswald } from 'next/font/google';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import './globals.css';
 
 /**
- * Дисплейный гротеск с крупными геометричными счётчиками — заголовки,
- * навигация, кнопки, лейблы. Он же базовый font-sans, применяется по
- * умолчанию на всё, что не переопределено ниже.
+ * Сжатый плакатный гротеск — заголовки, навигация, кнопки, лейблы. Он же
+ * базовый font-sans, применяется по умолчанию на всё, что не переопределено
+ * ниже. Условно-жирный и узкий, читается как афиша или бланк, а не как
+ * закруглённый SaaS-шрифт.
  */
-const unbounded = Unbounded({
+const oswald = Oswald({
   subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-unbounded',
+  weight: ['500', '600', '700'],
+  variable: '--font-oswald',
   display: 'swap',
 });
 
 /**
- * Тёплая редакционная антиква для длинных абзацев — подключается точечно
- * через селектор `p, li, dd` в globals.css, а не как базовый шрифт: дисплейный
- * гротеск на сплошном тексте быстро утомляет глаз.
+ * Нейтральный гротеск для длинных абзацев — подключается точечно через
+ * селектор `p, li, dd` в globals.css, а не как базовый шрифт: сплошной текст
+ * плакатной гарнитурой быстро утомляет глаз.
  */
-const ptSerif = PT_Serif({
+const plexSans = IBM_Plex_Sans({
   subsets: ['latin', 'cyrillic'],
-  weight: ['400', '700'],
-  variable: '--font-pt-serif',
+  weight: ['400', '500'],
+  variable: '--font-plex-sans',
   display: 'swap',
 });
 
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${unbounded.variable} ${ptSerif.variable} ${plexMono.variable}`}>
+    <html lang="ru" className={`${oswald.variable} ${plexSans.variable} ${plexMono.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
         <SiteHeader />
         <main className="flex-1">{children}</main>

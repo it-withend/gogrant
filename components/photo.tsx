@@ -2,27 +2,19 @@ import { countryPhoto, photo, type PhotoKey } from '@/lib/photos';
 
 type Tint = 'none' | 'stamp' | 'seal';
 
-const TINT_HEX: Record<Exclude<Tint, 'none'>, string> = {
-  stamp: '#1A4FA3',
-  seal: '#FF4433',
+const TINT_BORDER: Record<Exclude<Tint, 'none'>, string> = {
+  stamp: 'border-stamp',
+  seal: 'border-seal',
 };
 
 /**
- * Дуотон-обработка вместо честного цветного фото: чб-конверсия плюс цветной
- * слой в режиме blend-mode «color» держит светлые и тёмные участки как есть
- * и подкрашивает только полутона — так печатают рисографом в два прогона.
- * Без цвета (tint="none") получается ровно чёрно-белый снимок с усиленным
- * контрастом — спокойнее для миниатюр в сетке карточек.
+ * Все фото — жёсткий чёрно-белый снимок, без дуотон-заливки. Цвет остаётся
+ * только в рамке: акцентная обводка вместо цветного слоя поверх изображения —
+ * фото не подкрашивается, оно просто обведено.
  */
-function DuotoneLayer({ tint }: { tint: Tint }) {
+function TintFrame({ tint }: { tint: Tint }) {
   if (tint === 'none') return null;
-  return (
-    <span
-      aria-hidden
-      className="pointer-events-none absolute inset-0"
-      style={{ backgroundColor: TINT_HEX[tint], mixBlendMode: 'color', opacity: 0.6 }}
-    />
-  );
+  return <span aria-hidden className={`pointer-events-none absolute inset-0 border-4 ${TINT_BORDER[tint]}`} />;
 }
 
 type Common = {
@@ -52,16 +44,16 @@ export function Photo({
 
   return (
     <figure className={className}>
-      <div className={`relative overflow-hidden border-2 border-ink bg-plate shadow-hard ${ratio}`}>
+      <div className={`relative overflow-hidden border-2 border-ink bg-plate ${ratio}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={p.url}
           alt={p.alt}
-          className="h-full w-full object-cover grayscale contrast-[1.08]"
+          className="h-full w-full object-cover grayscale contrast-[1.15]"
           loading={priority ? 'eager' : 'lazy'}
           fetchPriority={priority ? 'high' : 'auto'}
         />
-        <DuotoneLayer tint={tint} />
+        <TintFrame tint={tint} />
       </div>
       <figcaption className="mt-1.5 flex flex-wrap items-baseline justify-between gap-2 font-mono text-[0.65rem] text-ink-soft">
         <span>{caption ?? p.alt}</span>
@@ -100,11 +92,11 @@ export function BarePhoto({
       <img
         src={p.url}
         alt={p.alt}
-        className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.08]"
+        className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.15]"
         loading={priority ? 'eager' : 'lazy'}
         fetchPriority={priority ? 'high' : 'auto'}
       />
-      <DuotoneLayer tint={tint} />
+      <TintFrame tint={tint} />
     </span>
   );
 }

@@ -3,15 +3,13 @@ import { days, formatDate, sortByUrgency, windowStatus } from '@/lib/dates';
 import type { Scholarship } from '@/lib/types';
 
 /**
- * Главный визуальный акцент сайта: отрывная лента вроде посадочного талона.
- * Каждый сегмент — программа, между сегментами перфорация, в сегменте —
- * круглая печать обратного отсчёта с лёгким наклоном, как настоящий оттиск.
+ * Главный визуальный акцент сайта: лента как табло на вокзале. Каждый
+ * сегмент — программа, число дней залито сплошным цветом на весь блок —
+ * никаких кругов и наклона, только жёсткий прямоугольник и крупная цифра.
  *
- * Единственная анимация на всём сайте: печати «впечатываются» по очереди
- * при первой загрузке. Угол наклона у каждой свой, чтобы не читалось шаблоном.
+ * Единственная анимация на всём сайте: блоки «включаются» по очереди при
+ * первой загрузке, как лампы табло.
  */
-
-const TILTS = ['-7deg', '5deg', '-4deg', '8deg', '-6deg', '3deg'];
 
 export function DeadlineStrip({ items }: { items: Scholarship[] }) {
   const sorted = sortByUrgency(items);
@@ -26,7 +24,7 @@ export function DeadlineStrip({ items }: { items: Scholarship[] }) {
 
           const n = isOpen ? st.daysLeft : st.kind === 'upcoming' ? st.daysUntil : 0;
           const caption = isOpen ? `${days(n)} до закрытия` : st.kind === 'upcoming' ? `${days(n)} до открытия` : 'Сезон закрыт';
-          const seal = isOpen || isClosed ? 'border-seal text-seal' : 'border-stamp text-stamp';
+          const block = isClosed ? 'border-2 border-rule text-ink-soft' : isOpen ? 'bg-seal text-paper' : 'bg-ink text-paper';
 
           return (
             <li key={s.slug} className="relative w-[15.5rem] shrink-0 sm:w-[17rem]">
@@ -37,12 +35,8 @@ export function DeadlineStrip({ items }: { items: Scholarship[] }) {
 
                 <div className="mt-4 flex justify-center">
                   <span
-                    className={`flex h-24 w-24 flex-col items-center justify-center rounded-full border-[2.5px] ${seal} animate-stamp`}
-                    style={{
-                      // @ts-expect-error — кастомное свойство для keyframes
-                      '--stamp-rot': TILTS[i % TILTS.length],
-                      animationDelay: `${120 + i * 90}ms`,
-                    }}
+                    className={`flex h-24 w-24 flex-col items-center justify-center animate-stamp ${block}`}
+                    style={{ animationDelay: `${120 + i * 90}ms` }}
                   >
                     {isClosed ? (
                       <span className="font-mono text-[0.7rem] uppercase tracking-[0.1em]">закрыт</span>

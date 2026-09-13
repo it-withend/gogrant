@@ -10,19 +10,15 @@
   body {
     @apply bg-paper text-ink antialiased;
     font-feature-settings: 'tnum' 0;
-    /* Мелкая точечная текстура — риф на растр рисографской печати, а не
-       плоская заливка одним тоном, как у типового SaaS-фона. */
-    background-image: radial-gradient(circle, rgba(23, 20, 15, 0.055) 1px, transparent 1.2px);
-    background-size: 4px 4px;
   }
 
-  /* Длинные абзацы — тёплой антиквой, а не дисплейным гротеском: PT Serif
-     подключается точечно, не как базовый шрифт всего документа. */
+  /* Длинные абзацы — нейтральным гротеском, а не плакатной гарнитурой:
+     Oswald на сплошном тексте быстро утомляет глаз. */
   p,
   li,
   dd,
   blockquote {
-    font-family: var(--font-pt-serif), Georgia, serif;
+    font-family: var(--font-plex-sans), system-ui, sans-serif;
   }
 
   /* Цифры в трекере и калькуляторах — табличные, чтобы не прыгали */
@@ -31,12 +27,12 @@
   }
 
   ::selection {
-    background: #ff4433;
-    color: #17140f;
+    background: #111111;
+    color: #ffffff;
   }
 
   :focus-visible {
-    outline: 2px solid #ff4433;
+    outline: 3px solid #1428ff;
     outline-offset: 2px;
   }
 }
@@ -49,45 +45,42 @@
 
   /* Перфорация между сегментами ленты дедлайнов */
   .perforation {
-    background-image: radial-gradient(circle at center, #ded2b4 1px, transparent 1.2px);
+    background-image: radial-gradient(circle at center, #d9d9d6 1px, transparent 1.2px);
     background-size: 1px 9px;
     background-repeat: repeat-y;
     background-position: center;
   }
 
   /*
-   * Жёсткая офсетная тень вместо мягкой размытой — приём риск-печати и
-   * неубрутализма. При наведении тень «впечатывается»: кнопка сдвигается
-   * к своей тени, офсет сокращается — тактильная обратная связь без
-   * анимации прозрачности или скругления.
+   * Плоская заливка вместо мягкой тени и вместо приёма «жёсткая тень плюс
+   * сдвиг по клику», который к этому моменту сам стал шаблонным решением.
+   * Вместо тактильной тени — инверсия: чёрная кнопка на ховере становится
+   * контурной, контурная — заливается. Никакой геометрии, только цвет.
    */
   .btn {
     @apply inline-flex items-center gap-2 border-2 border-ink bg-ink px-4 py-2.5
-      text-sm font-medium text-plate shadow-hard transition-all
-      hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-hard-sm
-      active:translate-x-[5px] active:translate-y-[5px] active:shadow-none;
+      font-sans text-sm font-medium uppercase tracking-[0.04em] text-paper transition-colors
+      hover:bg-paper hover:text-ink;
   }
 
   .btn-quiet {
-    @apply inline-flex items-center gap-2 border-2 border-ink bg-plate px-4 py-2.5
-      text-sm font-medium text-ink shadow-hard transition-all
-      hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-hard-sm
-      active:translate-x-[5px] active:translate-y-[5px] active:shadow-none;
+    @apply inline-flex items-center gap-2 border-2 border-ink bg-paper px-4 py-2.5
+      font-sans text-sm font-medium uppercase tracking-[0.04em] text-ink transition-colors
+      hover:bg-ink hover:text-paper;
   }
 
   .plate {
-    @apply border-2 border-ink bg-plate shadow-hard;
+    @apply border-2 border-ink bg-plate;
   }
 
   .label {
     @apply font-mono text-[0.68rem] uppercase tracking-[0.14em] text-ink-soft;
   }
 
-  /* Бейдж-«наклейка»: лёгкий наклон + жёсткая тень, как приклеенный стикер,
-     а не аккуратный SaaS-тег. Наклон приходит через inline --tilt в разметке. */
-  .sticker {
-    @apply inline-flex border-2 border-ink bg-plate shadow-hard-sm;
-    transform: rotate(var(--tilt, -2deg));
+  /* Плоская метка-бирка: прямой прямоугольник с рамкой, без наклона и тени —
+     читается как штамп в бланке, а не приклеенный стикер. */
+  .tag {
+    @apply inline-flex border-2 border-ink bg-plate;
   }
 }
 
