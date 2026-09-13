@@ -34,11 +34,14 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
 
   return (
     <>
-      <div className="relative h-44 overflow-hidden border-b border-rule sm:h-60">
-        <BarePhoto country={s.country_code} width={1600} className="h-full w-full object-cover" priority />
-      </div>
+      <BarePhoto
+        country={s.country_code}
+        width={1600}
+        priority
+        className="h-44 w-full border-b-2 border-ink sm:h-60"
+      />
 
-      <header className="border-b border-rule">
+      <header className="border-b-2 border-ink">
         <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
           <div className="flex flex-wrap items-center gap-3">
             <CountryMark code={s.country_code} />

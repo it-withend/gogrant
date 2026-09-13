@@ -194,9 +194,12 @@ export default async function HomePage() {
                 Большая часть этого срока — ожидание чужих решений, и только первый этап зависит целиком от кандидата.
               </p>
 
-              <div className="mt-8 overflow-hidden border border-plate/20">
-                <BarePhoto name="airport" width={800} className="aspect-[16/10] w-full object-cover opacity-90" />
-              </div>
+              <BarePhoto
+                name="airport"
+                width={800}
+                tint="seal"
+                className="mt-8 aspect-[16/10] w-full border-2 border-plate/25 shadow-hard-flame"
+              />
             </div>
 
             <ol className="grid gap-px bg-plate/15 sm:grid-cols-2">

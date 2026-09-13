@@ -32,11 +32,14 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
 
   return (
     <>
-      <div className="relative h-40 overflow-hidden border-b border-rule sm:h-56">
-        <BarePhoto name={guideCover(guide.slug)} width={1600} className="h-full w-full object-cover" priority />
-      </div>
+      <BarePhoto
+        name={guideCover(guide.slug)}
+        width={1600}
+        priority
+        className="h-40 w-full border-b-2 border-ink sm:h-56"
+      />
 
-      <header className="border-b border-rule">
+      <header className="border-b-2 border-ink">
         <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
           <SectionMark n="02" rule={false} />
           <h1 className="mt-4 max-w-3xl text-3xl font-bold leading-[1.15] tracking-tight sm:text-[2.4rem]">

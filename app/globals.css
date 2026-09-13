@@ -10,6 +10,19 @@
   body {
     @apply bg-paper text-ink antialiased;
     font-feature-settings: 'tnum' 0;
+    /* Мелкая точечная текстура — риф на растр рисографской печати, а не
+       плоская заливка одним тоном, как у типового SaaS-фона. */
+    background-image: radial-gradient(circle, rgba(23, 20, 15, 0.055) 1px, transparent 1.2px);
+    background-size: 4px 4px;
+  }
+
+  /* Длинные абзацы — тёплой антиквой, а не дисплейным гротеском: PT Serif
+     подключается точечно, не как базовый шрифт всего документа. */
+  p,
+  li,
+  dd,
+  blockquote {
+    font-family: var(--font-pt-serif), Georgia, serif;
   }
 
   /* Цифры в трекере и калькуляторах — табличные, чтобы не прыгали */
@@ -18,44 +31,63 @@
   }
 
   ::selection {
-    background: #1b4d8f;
-    color: #fafaf7;
+    background: #ff4433;
+    color: #17140f;
   }
 
   :focus-visible {
-    outline: 2px solid #1b4d8f;
+    outline: 2px solid #ff4433;
     outline-offset: 2px;
   }
 }
 
 @layer components {
-  /* Бланковая линовка слева от секции */
+  /* Линовка слева от секции */
   .field-rule {
     @apply border-l border-rule pl-4 sm:pl-6;
   }
 
   /* Перфорация между сегментами ленты дедлайнов */
   .perforation {
-    background-image: radial-gradient(circle at center, #c6c8c0 1px, transparent 1.2px);
+    background-image: radial-gradient(circle at center, #ded2b4 1px, transparent 1.2px);
     background-size: 1px 9px;
     background-repeat: repeat-y;
     background-position: center;
   }
 
+  /*
+   * Жёсткая офсетная тень вместо мягкой размытой — приём риск-печати и
+   * неубрутализма. При наведении тень «впечатывается»: кнопка сдвигается
+   * к своей тени, офсет сокращается — тактильная обратная связь без
+   * анимации прозрачности или скругления.
+   */
   .btn {
-    @apply inline-flex items-center gap-2 border border-ink bg-ink px-4 py-2.5 text-sm font-medium text-plate transition-colors hover:bg-stamp hover:border-stamp;
+    @apply inline-flex items-center gap-2 border-2 border-ink bg-ink px-4 py-2.5
+      text-sm font-medium text-plate shadow-hard transition-all
+      hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-hard-sm
+      active:translate-x-[5px] active:translate-y-[5px] active:shadow-none;
   }
 
   .btn-quiet {
-    @apply inline-flex items-center gap-2 border border-rule bg-plate px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-ink;
+    @apply inline-flex items-center gap-2 border-2 border-ink bg-plate px-4 py-2.5
+      text-sm font-medium text-ink shadow-hard transition-all
+      hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-hard-sm
+      active:translate-x-[5px] active:translate-y-[5px] active:shadow-none;
   }
 
   .plate {
-    @apply border border-rule bg-plate;
+    @apply border-2 border-ink bg-plate shadow-hard;
   }
 
   .label {
-    @apply font-mono text-[0.68rem] uppercase tracking-[0.12em] text-ink-soft;
+    @apply font-mono text-[0.68rem] uppercase tracking-[0.14em] text-ink-soft;
+  }
+
+  /* Бейдж-«наклейка»: лёгкий наклон + жёсткая тень, как приклеенный стикер,
+     а не аккуратный SaaS-тег. Наклон приходит через inline --tilt в разметке. */
+  .sticker {
+    @apply inline-flex border-2 border-ink bg-plate shadow-hard-sm;
+    transform: rotate(var(--tilt, -2deg));
   }
 }
 

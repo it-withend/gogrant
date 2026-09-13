@@ -21,7 +21,7 @@ export function PageHeader({
   lead?: string;
 }) {
   return (
-    <header className="border-b border-rule">
+    <header className="border-b-2 border-ink">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
         <SectionMark n={mark} />
         <h1 className="mt-5 max-w-3xl text-3xl font-bold leading-[1.15] tracking-tight sm:text-[2.6rem]">{title}</h1>
@@ -32,14 +32,16 @@ export function PageHeader({
 }
 
 /**
- * Страна обозначается кодом в рамке, а не флагом-эмодзи: это читается как
- * поле в анкете и одинаково выглядит на всех платформах.
+ * Страна обозначается кодом на наклонной «наклейке», а не флагом-эмодзи:
+ * читается как проштампованный ярлык на посылке, а не аккуратный SaaS-тег,
+ * и одинаково выглядит на всех платформах.
  */
 export function CountryMark({ code, size = 'md' }: { code: string; size?: 'sm' | 'md' }) {
   const cls = size === 'sm' ? 'h-6 w-8 text-[0.65rem]' : 'h-9 w-12 text-xs';
   return (
     <span
-      className={`inline-flex items-center justify-center border border-ink font-mono tracking-[0.08em] text-ink ${cls}`}
+      className={`sticker items-center justify-center font-mono font-medium tracking-[0.08em] text-ink ${cls}`}
+      style={{ '--tilt': '2deg' } as React.CSSProperties}
       aria-hidden
     >
       {code}
@@ -54,11 +56,14 @@ const COVERAGE_TEXT: Record<Coverage, string> = {
 };
 
 export function CoverageBadge({ coverage }: { coverage: Coverage }) {
-  const color =
-    coverage === 'full' ? 'border-stamp text-stamp' : coverage === 'partial' ? 'border-amber text-amber' : 'border-seal text-seal';
+  const dot = coverage === 'full' ? 'bg-stamp' : coverage === 'partial' ? 'bg-amber' : 'bg-seal';
 
   return (
-    <span className={`inline-flex items-center border px-2 py-1 font-mono text-[0.68rem] uppercase tracking-[0.1em] ${color}`}>
+    <span
+      className="sticker items-center gap-1.5 px-2.5 py-1 font-mono text-[0.68rem] uppercase tracking-[0.1em] text-ink"
+      style={{ '--tilt': '-1.5deg' } as React.CSSProperties}
+    >
+      <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${dot}`} aria-hidden />
       {COVERAGE_TEXT[coverage]}
     </span>
   );
@@ -66,7 +71,7 @@ export function CoverageBadge({ coverage }: { coverage: Coverage }) {
 
 export function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center border border-rule bg-paper px-2 py-1 font-mono text-[0.68rem] text-ink-soft">
+    <span className="inline-flex items-center border-2 border-rule bg-paper px-2 py-1 font-mono text-[0.68rem] text-ink-soft">
       {children}
     </span>
   );

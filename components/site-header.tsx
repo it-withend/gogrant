@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -14,18 +15,21 @@ const NAV = [
   { href: '/gpa', label: 'GPA' },
 ];
 
+/**
+ * Шапка на чёрном фоне: у знака свой чёрный квадратный холст, и на тёмной
+ * панели он читается без рамки-контейнера — куб как будто плывёт прямо на
+ * баре. Полоса-акцент снизу цвета seal (флуоресцентный риск-оранжевый)
+ * держит бренд-связку с логотипом и с лентой дедлайнов на главной.
+ */
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-rule bg-paper/95 backdrop-blur-[2px]">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-baseline gap-2.5" onClick={() => setOpen(false)}>
-          <span className="text-lg font-bold tracking-tight">Грант</span>
-          <span className="hidden font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-soft sm:inline">
-            СНГ
-          </span>
+    <header className="sticky top-0 z-40 border-b-4 border-seal bg-ink">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2.5 sm:px-6">
+        <Link href="/" className="flex items-center" onClick={() => setOpen(false)} aria-label="На главную">
+          <Image src="/brand-mark.png" alt="Грант" width={40} height={40} priority className="h-10 w-10" />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -36,7 +40,7 @@ export function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 className={`border-b-2 px-3 py-1.5 text-sm transition-colors ${
-                  active ? 'border-stamp text-ink' : 'border-transparent text-ink-soft hover:text-ink'
+                  active ? 'border-seal text-plate' : 'border-transparent text-plate/60 hover:text-plate'
                 }`}
               >
                 {item.label}
@@ -48,7 +52,7 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="border border-rule p-2 md:hidden"
+          className="border-2 border-plate/30 p-2 text-plate md:hidden"
           aria-label={open ? 'Закрыть меню' : 'Открыть меню'}
           aria-expanded={open}
         >
@@ -57,13 +61,13 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <nav className="border-t border-rule bg-plate md:hidden">
+        <nav className="border-t-2 border-plate/15 bg-ink md:hidden">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="block border-b border-rule px-4 py-3 text-sm last:border-0"
+              className="block border-b border-plate/10 px-4 py-3 text-sm text-plate/85 last:border-0"
             >
               {item.label}
             </Link>

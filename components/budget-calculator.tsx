@@ -72,7 +72,7 @@ export function BudgetCalculator({ scholarships, initialSlug }: { scholarships: 
               type="checkbox"
               checked={buffer}
               onChange={(e) => setBuffer(e.target.checked)}
-              className="mt-0.5 h-4 w-4 accent-[#1B4D8F]"
+              className="mt-0.5 h-4 w-4 accent-[#1A4FA3]"
             />
             <span className="text-ink-soft">
               Добавить запас 15% на непредвиденное. Он почти всегда уходит: доплата за багаж, повторный перевод
