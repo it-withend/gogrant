@@ -24,11 +24,12 @@ create table if not exists public.scholarships (
   coverage          coverage_type not null,
   coverage_summary  text not null,
   honest_note       text not null,
+  renewal_note      text not null default '',
   -- [{ label, included, note }]
   coverage_items    jsonb not null default '[]'::jsonb,
   stipend_note      text not null default '',
 
-  -- { age_max, age_min, gpa_min_5, gpa_note, languages: [...], education_level }
+  -- { age_max, age_min, gpa_min_5, gpa_hard, gpa_note, languages: [...], education_level }
   requirements      jsonb not null default '{}'::jsonb,
   documents         jsonb not null default '[]'::jsonb,   -- [text]
   steps             jsonb not null default '[]'::jsonb,   -- [{ title, body }]

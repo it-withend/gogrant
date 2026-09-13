@@ -60,7 +60,17 @@ function evaluate(s: Scholarship, a: Answers): MatchResult {
     if (reason) reasons.push(reason);
   };
 
-  // --- Возраст: единственное жёсткое ограничение
+  // --- Возраст: формальное ограничение, единственное почти во всех программах.
+  // Нижняя граница блокирует так же жёстко, как верхняя — это не про
+  // конкурентность, а про то, допустят ли заявку до рассмотрения вообще.
+  if (s.requirements.age_min && a.age < s.requirements.age_min) {
+    blocked = true;
+    reasons.push({
+      kind: 'block',
+      text: `Нижняя граница возраста — ${years(s.requirements.age_min)}, а тебе на момент подачи будет меньше. Это формальное требование, обойти его нельзя.`,
+    });
+  }
+
   if (s.requirements.age_max) {
     const limit = s.requirements.age_max;
     if (a.age > limit) {
@@ -77,15 +87,24 @@ function evaluate(s: Scholarship, a: Answers): MatchResult {
     } else {
       rule(12, 12, { kind: 'plus', text: `По возрасту проходишь с запасом, предел — ${years(limit)}.` });
     }
-  } else {
+  } else if (!blocked) {
     rule(12, 12, { kind: 'plus', text: 'Верхней границы возраста нет вообще.' });
   }
 
-  // --- Средний балл
+  // --- Средний балл. gpa_hard отличает формальный проходной порог (заявку
+  // с баллом ниже просто не примут) от справочного ориентира, где решает
+  // конкурс, а не отсечка — у Турции и Кореи порог формальный, у Венгрии и
+  // Китая сам источник прямо говорит, что формального порога нет.
   const gpa = GPA_VALUE[a.gpa];
   if (s.requirements.gpa_min_5) {
     const need = s.requirements.gpa_min_5;
-    if (gpa >= need + 0.3) {
+    if (s.requirements.gpa_hard && gpa < need) {
+      blocked = true;
+      reasons.push({
+        kind: 'block',
+        text: `Формальный проходной порог по среднему баллу — ${need.toFixed(2)}, у тебя ниже. Заявку с таким баллом здесь не примут к рассмотрению.`,
+      });
+    } else if (gpa >= need + 0.3) {
       rule(18, 18, { kind: 'plus', text: `Твой средний балл уверенно выше порога ${need.toFixed(2)}.` });
     } else if (gpa >= need) {
       rule(11, 18, {
@@ -95,7 +114,7 @@ function evaluate(s: Scholarship, a: Answers): MatchResult {
     } else {
       rule(0, 18, {
         kind: 'minus',
-        text: `Заявленный порог — ${need.toFixed(2)}, у тебя ниже. Шанс остаётся, но придётся компенсировать языком и мотивационным письмом.`,
+        text: `Заявленный порог — ${need.toFixed(2)}, у тебя ниже. Порог справочный, не формальный, но шанс небольшой — придётся компенсировать языком и мотивационным письмом.`,
       });
     }
   } else {

@@ -165,10 +165,23 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
               </ol>
             </section>
 
+            {/* Продление */}
+            <section className="mt-14">
+              <SectionMark n="05" rule={false} />
+              <h2 className="mt-3 text-xl font-bold tracking-tight">Как не потерять грант на второй год</h2>
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-soft">
+                Про это почти не пишут на этапе подачи, а зря: стипендию можно потерять уже после зачисления, если не
+                следить за условиями продления.
+              </p>
+              <div className="mt-5 border-l-2 border-amber bg-plate p-5">
+                <p className="text-sm leading-[1.75] text-ink">{s.renewal_note}</p>
+              </div>
+            </section>
+
             {/* Гайды */}
             {related.length > 0 && (
               <section className="mt-14">
-                <SectionMark n="05" rule={false} />
+                <SectionMark n="06" rule={false} />
                 <h2 className="mt-3 text-xl font-bold tracking-tight">Разборы по этой программе</h2>
                 <ul className="mt-5 divide-y divide-rule border-y border-rule">
                   {related.map((g) => (

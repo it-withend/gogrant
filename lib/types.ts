@@ -10,6 +10,9 @@ export type Requirements = {
   age_max?: number;
   age_min?: number;
   gpa_min_5?: number;
+  /** true — формальный проходной порог, ниже которого заявку не рассматривают;
+   *  без флага порог справочный, конкурс идёт не строго по нему. */
+  gpa_hard?: boolean;
   gpa_note?: string;
   languages: { lang: string; level: string; note?: string }[];
   education_level: string;
@@ -53,6 +56,9 @@ export type Scholarship = {
   coverage: Coverage;
   coverage_summary: string;
   honest_note: string;
+  /** Условия, при которых грант можно потерять на второй и следующие годы —
+   *  порог по успеваемости, посещаемость, продление визы и т.д. */
+  renewal_note: string;
   coverage_items: CoverageItem[];
   stipend_note: string;
   requirements: Requirements;
