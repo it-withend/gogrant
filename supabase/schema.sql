@@ -81,6 +81,35 @@ create table if not exists public.guides (
 create index if not exists guides_updated_idx on public.guides (updated_at desc);
 
 -- ---------------------------------------------------------------------------
+-- Просмотры страниц — для приватной аналитики на /admin
+-- ---------------------------------------------------------------------------
+create table if not exists public.page_views (
+  id          bigint generated always as identity primary key,
+  path        text not null,
+  referrer    text,
+  -- случайный id из куки посетителя, не привязан к личности; IP и user-agent
+  -- не сохраняются намеренно — для «сколько людей заходило» они не нужны
+  session_id  text not null,
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists page_views_created_idx on public.page_views (created_at desc);
+create index if not exists page_views_path_idx on public.page_views (path);
+
+alter table public.page_views enable row level security;
+
+-- Любой посетитель может записать свой просмотр...
+drop policy if exists "anyone can log a page view" on public.page_views;
+create policy "anyone can log a page view"
+  on public.page_views for insert
+  to anon, authenticated
+  with check (true);
+
+-- ...но прочитать эти данные не может никто, кроме service role (обходит RLS).
+-- То есть /admin читает статистику только через сервер с SUPABASE_SERVICE_ROLE_KEY,
+-- публичным anon-ключом эти строки не достать вообще.
+
+-- ---------------------------------------------------------------------------
 -- Доступ: сайт читает данные анонимно, пишет только service role
 -- ---------------------------------------------------------------------------
 alter table public.scholarships enable row level security;

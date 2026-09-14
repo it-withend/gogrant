@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { IBM_Plex_Mono, IBM_Plex_Sans, Oswald } from 'next/font/google';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { AnalyticsBeacon } from '@/components/analytics-beacon';
 import './globals.css';
 
 /**
@@ -49,6 +51,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ru" className={`${oswald.variable} ${plexSans.variable} ${plexMono.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
+        <Suspense fallback={null}>
+          <AnalyticsBeacon />
+        </Suspense>
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
